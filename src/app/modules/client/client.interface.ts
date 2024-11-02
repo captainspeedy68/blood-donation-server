@@ -5,10 +5,10 @@ export type TUserName = {
   middleName: string
   lastName: string
 }
+
 export type TClient = {
   id: string
   user: Types.ObjectId
-  
   name: TUserName
   gender: 'male' | 'female'
   dateOfBirth?: string
@@ -16,5 +16,4 @@ export type TClient = {
   contactNumber: string
   bloodGroup?: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-'
   presentAddress: string
-  isDeleted: boolean
 }

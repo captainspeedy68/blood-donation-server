@@ -1,25 +1,22 @@
-import { Request, Response } from 'express'
+import httpStatus  from 'http-status';
+import { NextFunction, Request, RequestHandler, Response } from 'express'
 import { UserServices } from './user.service'
+import sendResponse from '../../utils/sendResponse';
+import catchAsync from '../../utils/catchAsync';
 
-const createClient = async (req: Request, res: Response) => {
+const createClient: RequestHandler = catchAsync(async (req, res, next) => {
   const { password, client } = req.body
   // console.log(client);
-  try{
-
     const result = await UserServices.createClientIntoDB(password, client);
-    res.status(200).json({
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
       success: true,
       message: 'Client created successfully',
       data: result,
     })
-  }catch(err){
-    res.status(400).json({
-      success: false,
-      message: 'Client creation failed!!!!',
-      err,
-    });
   }
-}
+)
 
 export const UserControllers = {
   createClient

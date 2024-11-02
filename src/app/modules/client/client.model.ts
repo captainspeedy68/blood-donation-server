@@ -4,7 +4,6 @@ import bcrypt from "bcrypt";
 import config from '../../config';
 
 const usernameSchema = new Schema<TUserName>({
-
   firstName: {
     type: String,
     required: true,
@@ -57,21 +56,13 @@ const clientSchema = new Schema<TClient>({
     type: String,
     required: true,
   },
-  isDeleted: {
-    type: Boolean,
-    default: false,
-  },
+  
 }, {
   timestamps: true,
   toJSON: {
     virtuals: true
   }
 });
-
-// password hashing
-
-
-
 
 
 // virtual

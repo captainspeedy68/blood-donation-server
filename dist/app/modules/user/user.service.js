@@ -12,15 +12,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const app_1 = __importDefault(require("./app"));
-const config_1 = __importDefault(require("./app/config"));
-const mongoose_1 = __importDefault(require("mongoose"));
-main().catch(err => console.log(err));
-function main() {
-    return __awaiter(this, void 0, void 0, function* () {
-        yield mongoose_1.default.connect(config_1.default.db_url);
-        app_1.default.listen(config_1.default.port, () => {
-            console.log(`Example app listening on port ${config_1.default.port}`);
-        });
-    });
-}
+exports.UserServices = void 0;
+const config_1 = __importDefault(require("../../config"));
+const client_model_1 = require("../client/client.model");
+const user_model_1 = require("./user.model");
+const createClientIntoDB = (password, clientData) => __awaiter(void 0, void 0, void 0, function* () {
+    // creating a user object to set role and password
+    const userData = {};
+    userData.password = password || config_1.default.default_password;
+    //   set role
+    userData.role = 'client';
+    userData.id = '6242';
+    const result = yield user_model_1.User.create(userData);
+    if (Object.keys(result).length) {
+        clientData.id = result.id;
+        clientData.user = result._id;
+        const newClient = yield client_model_1.Client.create(clientData);
+        return newClient;
+    }
+    // console.log(result);
+});
+exports.UserServices = {
+    createClientIntoDB,
+};

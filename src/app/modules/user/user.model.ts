@@ -33,7 +33,7 @@ const userSchema = new Schema<TUser>(
   { timestamps: true },
 )
 
-
+// password hashing pre middleware
 userSchema.pre("save", async function () {
   // console.log(this, " is pre middleware");
   const user = this;
