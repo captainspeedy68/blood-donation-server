@@ -14,11 +14,15 @@ const createClientIntoDB = async (password: string, clientData: TClient) => {
   session.startTransaction();
 
   try {
+    // generating a unique id here
+    const clientId = await generateUniqueId('client');
+
+
     // Create user object to set role and password
     const userData: Partial<TUser> = {};
     userData.password = password || (config.default_password as string);
     userData.role = 'client';
-    userData.id = '6245';
+    userData.id = clientId;
 
     // Create User document within the session
     const result = await User.create([userData], { session });
@@ -51,10 +55,13 @@ const createDonorIntoDB = async (password: string, donorData: TDonor) => {
   session.startTransaction();
 
   try {
+    // generating a unique donor id here
+    const donorId = await generateUniqueId('donor');
+
     const userData: Partial<TUser> = {};
     userData.password = password || (config.default_password as string);
     userData.role = 'donor';
-    userData.id = '6329';
+    userData.id = donorId;
 
     // Create User document within the session
     const result = await User.create([userData], { session });
@@ -81,6 +88,20 @@ const createDonorIntoDB = async (password: string, donorData: TDonor) => {
   }
 }
 
+
+
+const generateUniqueId = async (role: string) => {
+
+  const timestamp = Date.now().toString().slice(-6); 
+  
+  // Get the last created user to get the latest index
+  const latestUser = await User.findOne().sort({ createdAt: -1 }).exec();
+  const latestIndex = latestUser ? parseInt(latestUser.id.slice(1)) : 0; 
+
+  const newIndex = latestIndex + 1;
+
+  return `${role.charAt(0).toUpperCase()}${timestamp}${newIndex.toString().padStart(5, '0')}`;
+};
 
 
 
