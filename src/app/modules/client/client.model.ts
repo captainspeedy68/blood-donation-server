@@ -16,6 +16,14 @@ const usernameSchema = new Schema<TUserName>({
     required: true,
   }
 })
+const addressSchema = new Schema(
+  {
+    division: { type: String, required: true },
+    district: { type: String, required: true },
+  },
+  { _id: false }
+);
+
 
 const clientSchema = new Schema<TClient>({
   id: {
@@ -36,7 +44,7 @@ const clientSchema = new Schema<TClient>({
     required: true,
   },
   dateOfBirth: {
-    type: String,
+    type: Date,
   },
   email: {
     type: String,
@@ -52,10 +60,7 @@ const clientSchema = new Schema<TClient>({
     type: String,
     enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
   },
-  presentAddress: {
-    type: String,
-    required: true,
-  },
+  presentAddress: { type: addressSchema, required: true }
   
 }, {
   timestamps: true,

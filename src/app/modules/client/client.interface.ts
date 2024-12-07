@@ -1,9 +1,14 @@
 import { Types } from 'mongoose'
 
+
 export type TUserName = {
   firstName: string
   middleName: string
   lastName: string
+}
+export type TAddress = {
+  division: string;
+  district: string;
 }
 
 export type TClient = {
@@ -11,9 +16,9 @@ export type TClient = {
   user: Types.ObjectId
   name: TUserName
   gender: 'male' | 'female'
-  dateOfBirth?: string
+  dateOfBirth?: Date
   email: string
   contactNumber: string
   bloodGroup?: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-'
-  presentAddress: string
+  presentAddress: TAddress
 }
