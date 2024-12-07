@@ -5,44 +5,84 @@ import { TDonor } from '../donor/donor.interface'
 import { Donor } from '../donor/donor.model'
 import { TUser } from './user.interface'
 import { User } from './user.model'
+import { startSession } from 'mongoose';
+
 
 const createClientIntoDB = async (password: string, clientData: TClient) => {
-  // creating a user object to set role and password
-  const userData: Partial<TUser> = {}
+  // Start a session
+  const session = await startSession();
+  session.startTransaction();
 
-  userData.password = password || (config.default_password as string)
+  try {
+    // Create user object to set role and password
+    const userData: Partial<TUser> = {};
+    userData.password = password || (config.default_password as string);
+    userData.role = 'client';
+    userData.id = '6245';
 
-  //   set role
-  userData.role = 'client'
+    // Create User document within the session
+    const result = await User.create([userData], { session });
 
-  userData.id = '6245'
+    if (Object.keys(result).length) {
+      clientData.id = result[0].id;  // Assign user ID to clientData
+      clientData.user = result[0]._id; // Assign user _id to clientData
 
-  const result = await User.create(userData)
-  if (Object.keys(result).length) {
-    clientData.id = result.id
-    clientData.user = result._id
+      // Create Client document within the session
+      const newClient = await Client.create([clientData], { session });
 
-    const newClient = await Client.create(clientData)
-    return newClient
+      // Commit the transaction
+      await session.commitTransaction();
+      session.endSession();
+      return newClient;
+    } else {
+      throw new Error('User creation failed');
+    }
+  } catch (error) {
+    // Rollback the transaction if any operation fails
+    await session.abortTransaction();
+    session.endSession();
+    throw error;  // Re-throw the error to be handled by the caller
   }
+}
 
-  // console.log(result);
+const createDonorIntoDB = async (password: string, donorData: TDonor) => {
+  // Start a session
+  const session = await startSession();
+  session.startTransaction();
+
+  try {
+    const userData: Partial<TUser> = {};
+    userData.password = password || (config.default_password as string);
+    userData.role = 'donor';
+    userData.id = '6329';
+
+    // Create User document within the session
+    const result = await User.create([userData], { session });
+
+    if (Object.keys(result).length) {
+      donorData.id = result[0].id; // Assign user ID to donorData
+      donorData.user = result[0]._id; // Assign user _id to donorData
+
+      // Create Donor document within the session
+      const newDonor = await Donor.create([donorData], { session });
+
+      // Commit the transaction
+      await session.commitTransaction();
+      session.endSession();
+      return newDonor;
+    } else {
+      throw new Error('User creation failed');
+    }
+  } catch (error) {
+    // Rollback the transaction if any operation fails
+    await session.abortTransaction();
+    session.endSession();
+    throw error;  // Re-throw the error to be handled by the caller
+  }
 }
 
 
-const createDonorIntoDB = async(password: string, donorData: TDonor) =>{
-  const userData: Partial<TUser> = {};
-  userData.password = password || (config.default_password as string);
-  userData.role = 'client';
-  userData.id = '6329';;
-  const result = await User.create(userData);
-  if(Object.keys(result).length){
-    donorData.id = result.id;
-    donorData.user = result._id;
-    const newDonor = await Donor.create(donorData);
-    return newDonor;
-  }
-}
+
 
 export const UserServices = {
   createClientIntoDB,
