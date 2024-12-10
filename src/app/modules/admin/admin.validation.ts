@@ -1,30 +1,38 @@
-import { z } from 'zod';
+import { Types } from 'mongoose'
+import { z } from 'zod'
 
+const presentAddressValidationSchema = z.object({
+  division: z.string(),
+  district: z.string(),
+})
 
-const addressValidationSchema = z.object({
-  division: z.string().min(1, 'Division is required'),
-  district: z.string().min(1, 'District is required'),
-});
+const userNameValidationSchema = z.object({
+  firstName: z.string(),
+  middleName: z.string().optional(),
+  lastName: z.string(),
+})
 
-
-const adminValidationSchema = z.object({
-  id: z.string().min(1, 'ID is required').max(100, 'ID is too long'),
-  name: z.object({
-    firstName: z.string().min(1, 'First name is required'),
-    middleName: z.string().optional(),
-    lastName: z.string().min(1, 'Last name is required'),
+const adminCreationValidationSchema = z.object({
+  body: z.object({
+    password: z.string().optional(),
+    admin: z.object({
+      // id: z.string().min(1, 'ID is required').max(100, 'ID is too long'),
+      name: userNameValidationSchema,
+      dateOfBirth: z.preprocess((value) => {
+        if (typeof value === "string") return new Date(value); 
+        return value;
+      }, z.date()),
+      email: z.string().email('Invalid email format').min(1, 'Email is required'),
+      contactNo: z.string().min(1, 'Contact number is required'),
+      emergencyContactNo: z.string().optional(),
+      presentAddress: presentAddressValidationSchema,
+      permanentAddress: presentAddressValidationSchema.optional(),
+      profileImage: z.string().optional(),
+      isDeleted: z.boolean().default(false),
+    }),
   }),
-  dateOfBirth: z.date(),
-  email: z.string().email('Invalid email format').min(1, 'Email is required'),
-  contactNo: z.string().min(1, 'Contact number is required'),
-  emergencyContactNo: z.string().optional(),
-  presentAddress: addressValidationSchema,
-  permanentAddress: addressValidationSchema.optional(),
-  profileImage: z.string().optional(),
-  isDeleted: z.boolean().default(false),
-});
+})
 
+type TAdminCreationValidated = z.infer<typeof adminCreationValidationSchema>;
 
-type TAdminValidated = z.infer<typeof adminValidationSchema>;
-
-export { adminValidationSchema, TAdminValidated };
+export { adminCreationValidationSchema, TAdminCreationValidated };

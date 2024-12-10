@@ -1,6 +1,5 @@
-import { Schema, Document, Types,  model } from 'mongoose';
-import { TDonor } from './donor.interface';
-
+import { Schema, Document, Types, model } from 'mongoose'
+import { TDonor } from './donor.interface'
 
 const userNameSchema = new Schema(
   {
@@ -8,18 +7,16 @@ const userNameSchema = new Schema(
     middleName: { type: String },
     lastName: { type: String, required: true },
   },
-  { _id: false }  
-);
-
+  { _id: false },
+)
 
 const addressSchema = new Schema(
   {
     division: { type: String, required: true },
     district: { type: String, required: true },
   },
-  { _id: false }
-);
-
+  { _id: false },
+)
 
 const donorSchema = new Schema(
   {
@@ -29,11 +26,18 @@ const donorSchema = new Schema(
     dateOfBirth: { type: Date },
     email: { type: String, required: true, unique: true },
     contactNumber: { type: String, required: true },
-    bloodGroup: { type: String, enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'] },
+    bloodGroup: {
+      type: String,
+      enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+    },
+    status: {
+      type: String,
+      enum: ['available', 'unavailable'],
+      default: 'available',
+    },
     presentAddress: { type: addressSchema, required: true },
   },
-  { timestamps: true } 
-);
+  { timestamps: true },
+)
 
-
-export const Donor = model<TDonor>("Donor", donorSchema);
+export const Donor = model<TDonor>('Donor', donorSchema)

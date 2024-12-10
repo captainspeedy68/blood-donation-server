@@ -1,26 +1,29 @@
-import { Types } from "mongoose";
+// import { TUser } from './../user/user.interface';
+import { Types } from 'mongoose'
 
-export interface TAdmin {
-    id: string;
-    name: {
-      firstName: string;
-      middleName?: string;
-      lastName: string;
-    };
-    dateOfBirth: Date;
-    email: string;
-    contactNo: string;
-    emergencyContactNo?: string;
-    presentAddress: {
-      division: string;
-      district: string;
-    };
-    permanentAddress?: {
-      division: string;
-      district: string;
-    };
-    profileImage?: string;
-    // managementUsers: Types.ObjectId[];
-    isDeleted: boolean;
-  }
-  
+export type TUserName = {
+  firstName: string
+  middleName: string
+  lastName: string
+}
+
+export type TAddress = {
+  division: string;
+  district: string;
+}
+
+
+export type TAdmin = {
+  user: Types.ObjectId
+  id: string
+  name: TUserName
+  dateOfBirth: Date
+  email: string
+  contactNo: string
+  emergencyContactNo?: string
+  presentAddress: TAddress
+
+  profileImage?: string
+  // managementUsers: Types.ObjectId[];
+  isDeleted: boolean
+}
