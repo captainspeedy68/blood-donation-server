@@ -20,11 +20,11 @@ const userSchema = new Schema<TUser>(
       type: String,
       enum: ['admin', 'client', 'donor'],
     },
-    status: {
-      type: String,
-      enum: ['available', 'unavailable'],
-      default: 'available',
-    },
+    // status: {
+    //   type: String,
+    //   enum: ['available', 'unavailable'],
+    //   default: 'available',
+    // },
     isDeleted: {
       type: Boolean,
       default: false

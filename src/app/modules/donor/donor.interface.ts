@@ -20,5 +20,6 @@ export type TDonor = {
   email: string
   contactNumber: string
   bloodGroup?: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-'
+  status: "available" | "unavailable";
   presentAddress: TAddress;
 }

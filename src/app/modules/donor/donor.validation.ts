@@ -24,6 +24,7 @@ export const donorCreationValidationSchema = z.object({
       email: z.string().email(),
       contactNumber: z.string(),
       bloodGroup: z.enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']),
+      status: z.enum(['available', "unavailable"]),
       presentAddress: presentAddressValidationSchema,
     }),
   }),

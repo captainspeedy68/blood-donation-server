@@ -19,7 +19,7 @@ const getAllDonors: RequestHandler = catchAsync(async (req, res, next) => {
         
         result = await DonorServices.getAllDonorsFromDB();
     }
-
+    console.log(result);
     sendResponse(res, {
         success: true,
         message: 'Donors fetched successfully',

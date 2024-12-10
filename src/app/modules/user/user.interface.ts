@@ -3,7 +3,7 @@ export type TUser =  {
     password: string;
     needsPasswordChange: boolean;
     role: "admin" | "client" | "donor";
-    status: "available" | "unavailable";
+    // status: "available" | "unavailable";
     isDeleted: boolean
 }
 

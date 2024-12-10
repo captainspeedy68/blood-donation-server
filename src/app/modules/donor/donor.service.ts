@@ -11,23 +11,12 @@ const getAllDonorsFromDB = async () => {
 // Service to fetch donors based on query parameters (like bloodGroup, division, district)
 const getDonorsByQueryFromDB = async (bloodGroup: string, division: string, district: string) => {
     try {
-        // const result = await Donor.find({
-        //     bloodGroup,
-        //     'presentAddress.division': division,
-        //     'presentAddress.district': district,
-        // });
         const result = await Donor.aggregate([
             { $match: { 
                 "presentAddress.division": division,
                 "presentAddress.district": district,
                 bloodGroup: bloodGroup
             }},
-            {
-                $group: {
-                    _id: "$presentAddress.district",
-                    totalDonors: { $sum: 1 }
-                }
-            }
         ]);
         return result;
     } catch (error) {
@@ -35,6 +24,7 @@ const getDonorsByQueryFromDB = async (bloodGroup: string, division: string, dist
         throw error; // Re-throw the error to be handled by the controller
     }
 };
+    
 
 const getDonorsWithPagination = async (page: number, limit: number) => {
     const result = await Donor.find()
