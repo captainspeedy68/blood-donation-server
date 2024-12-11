@@ -1,3 +1,4 @@
+import { MailRouter } from './app/config/nodmailer';
 import { Application, Request, Response} from 'express'
 import cors from 'cors'
 import express from 'express'
@@ -11,10 +12,12 @@ const app: Application = express()
 
 // Middleware
 app.use(express.json())
-app.use(cors())
+app.use(cors());
 dotenv.config();
 // Routes
-app.use('/api',router)
+app.use('/api',router);
+
+// app.use("/send-email", MailRouter)
 
 const test = (req: Request, res: Response) => {
   res.send('Hello World!')

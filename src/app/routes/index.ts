@@ -3,6 +3,7 @@ import { UserRoutes } from "../modules/user/user.routes";
 import { DonorRoutes } from "../modules/donor/donor.router";
 import { ClientRoutes } from "../modules/client/client.routes";
 import { AdminRoutes } from "../modules/admin/admin.router";
+import { MailRouter } from "../config/nodmailer";
 
 const router = Router();
 
@@ -22,6 +23,10 @@ const moduleRoutes = [
     {
         path: "/admins",
         route: AdminRoutes
+    },
+    {
+        path: "/send-email",
+        route: MailRouter
     }
 ]
 
